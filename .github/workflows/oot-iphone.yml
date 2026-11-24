@@ -41,6 +41,8 @@ jobs:
           python3 kit/reconstruct.py kit work .
           df -h
           du -sh work
+      - name: Install build tools
+        run: brew install xcodegen glslang
       - name: Build IPA
         run: |
           NUP="work/nup/The Legend of Zelda Ocarina of Time [0400486024dec000][v131072].nup"
