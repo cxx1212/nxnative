@@ -62,27 +62,27 @@ struct SaveSyncReport {
         if cloudDevice.hasPrefix("iPhone") { return "iPhone" }
         if cloudDevice.hasPrefix("iPad") { return "iPad" }
         if cloudDevice.contains("Mac") { return "Mac" }
-        return cloudDevice.isEmpty ? "another device" : cloudDevice
+        return cloudDevice.isEmpty ? "其他设备" : cloudDevice
     }
 
     /// `here`: "iPhone" or "Mac"
-    func localLabel(here: String) -> String { "This \(here)'s: \(Self.when(localSaved)), \(Self.size(localSize))" }
-    var cloudLabel: String { "The \(cloudDeviceKind)'s in iCloud: \(Self.when(cloudSaved)), \(Self.size(cloudSize))" }
-    static let chooseTitle = "Which save do you want to play?"
+    func localLabel(here: String) -> String { "这台 \(here) 的：\(Self.when(localSaved))，\(Self.size(localSize))" }
+    var cloudLabel: String { "iCloud 中\(cloudDeviceKind)的：\(Self.when(cloudSaved))，\(Self.size(cloudSize))" }
+    static let chooseTitle = "你要玩哪个存档？"
     func chooseMessage(here: String) -> String {
-        "Both this \(here)'s save and the one in iCloud changed since they were last the same. The newer one is not always the one with more progress: "
-            + "a new game saved a minute later is newer. The one you don't pick is kept in the save's backups folder."
+        "这台 \(here) 的存档和 iCloud 中的存档自上次同步后都发生了变化。较新的不一定是进度更多的："
+            + "一个新游戏一分钟后保存的就更新。未被选中的那个会保留在存档的备份文件夹中。"
     }
-    static let missingTitle = "No cloud save found"
+    static let missingTitle = "未找到云存档"
     /// Short: on a landscape iPhone the dialog is a popover, and a longer text pushed the buttons out of view
     func missingMessage(here: String) -> String {
-        "This \(here) synced a save here before, but iCloud shows none now: not listed yet (often after choosing the folder again), or removed. "
-            + "Sending replaces any save iCloud has not shown yet."
+        "这台 \(here) 之前曾在此同步过存档，但 iCloud 现在没有显示：可能是尚未列出（重新选择文件夹后常见），或者已被删除。"
+            + "发送会替换 iCloud 尚未显示的任何存档。"
     }
-    func sendLabel(here: String) -> String { "Send This \(here)'s Save" }
-    static let unreadableTitle = "The cloud save didn't come"
+    func sendLabel(here: String) -> String { "发送这台 \(here) 的存档" }
+    static let unreadableTitle = "云存档未送达"
     func unreadableMessage(here: String) -> String {
-        "iCloud didn't deliver this game's save in \(Self.waitMs / 1000) seconds. If you play this \(here)'s save now, it is not sent to iCloud "
-            + "until it has been compared with the cloud's at a later start."
+        "iCloud 未能在 \(Self.waitMs / 1000) 秒内送达该游戏的存档。如果你现在玩这台 \(here) 的存档，它不会被发送到 iCloud"
+            + "，直到在下次启动时与云端对比之后。"
     }
 }

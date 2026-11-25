@@ -23,8 +23,8 @@ private func gameMenuItems() -> [UIMenuElement] {
     var placed = false
     if let m = gameMenuModel {
         for section in m.sections {
-            var rows: [UIMenuElement] = section == "Controls" ? [layout] : []
-            if section == "Controls" { placed = true }
+            var rows: [UIMenuElement] = section == "控制" ? [layout] : []
+            if section == "控制" { placed = true }
             for s in m.rows(in: section) where (s.kind == "choice" || s.kind == "toggle") && dm_setting_live(s.env, nil) { rows.append(gameMenuRow(m, s)) }
             if !rows.isEmpty { items.append(UIMenu(options: .displayInline, children: rows)) }
         }
