@@ -10,7 +10,12 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE)); sys.path.insert(0, str(HERE.parent / 'tools'))
 import game, nacp, nso_syms
 
-SECTIONS = ('Game', 'Controls', 'Performance')   # headings on the single settings screen
+SECTIONS = ('游戏', '控制', '性能')   # headings on the single settings screen
+LANG_NAMES = {'en-US': '美式英语', 'en-GB': '英式英语', 'ja': '日语', 'fr': '法语', 'de': '德语',
+              'es-419': '拉丁美洲西班牙语', 'es': '西班牙语', 'it': '意大利语', 'nl': '荷兰语',
+              'fr-CA': '加拿大法语', 'pt': '葡萄牙语', 'ru': '俄语', 'ko': '韩语',
+              'zh-Hant': '繁体中文', 'zh-Hans': '简体中文', 'pt-BR': '巴西葡萄牙语',
+              'pl': '波兰语', 'th': '泰语'}   # the language names the launcher shows
 SCHEMA = 1   # launcher.json's version (docs/launcher.schema.json); it grows only by optional fields, so a reader of 1 reads every 1
 # The meta column's keys, each with the pattern its value must match. A key is added here, in docs/frontends.md and in
 # docs/launcher.schema.json together (test_launcher_settings.py checks that the three agree); a reader ignores keys it does not know
@@ -56,7 +61,7 @@ def fixups_keys(path):   # '# KEY<TAB>value' header rows of a rewriter table, as
     return {m[1]: m[2].strip() for m in re.finditer(r'^# (\w+)\t(.*)$', path.read_text(encoding='utf-8'), re.M)}
 
 
-UNKNOWN_LANGUAGES = 'This game\'s files do not list its languages, so some of these may not be in the game. It may then show another one.'
+UNKNOWN_LANGUAGES = '该游戏的文件未列出其语言，因此其中一些可能不在游戏中，游戏可能会显示其他语言。'
 
 
 def build(gid, patched, control, other_programs=()):
@@ -68,7 +73,7 @@ def build(gid, patched, control, other_programs=()):
     mac_mic = platform == 'mac' and nso_syms.audio_input_capable(
         p for folder in (patched, *other_programs) for p in Path(folder).glob('*.patched.bin'))
     have = nacp.languages(control)
-    langs = [(c, n) for c, n in nacp.LANGUAGES if not have or c in have]   # no list (a dump or a NUP has no control data, none of its packages may): any language may be the game's, as DM_LANG and the NSP script's check take it
+    langs = [(c, LANG_NAMES.get(c, n)) for c, n in nacp.LANGUAGES if not have or c in have]   # no list (a dump or a NUP has no control data, none of its packages may): any language may be the game's, as DM_LANG and the NSP script's check take it
 
     def macro(name, n):
         if name not in macros: sys.exit(f'settings.tsv:{n}: no {name} in the game profile header (game.py header)')
